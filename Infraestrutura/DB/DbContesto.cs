@@ -16,6 +16,7 @@ namespace minimal_api.Infraestrutura.DB
             _configuracaoAppSettings = configuracaoAppSettings;
         }
         public DbSet<Administrador> Administradores { get; set; } = default!;
+        public DbSet<Veiculo> Veiculos { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,10 +32,9 @@ namespace minimal_api.Infraestrutura.DB
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             if(!optionsBuilder.IsConfigured)
             {
-                var stringConexao = _configuracaoAppSettings.GetConnectionString("SqlString").ToString();
+                var stringConexao = _configuracaoAppSettings.GetConnectionString("SqlString")?.ToString();
                 if(!string.IsNullOrEmpty(stringConexao))
                 {
                     optionsBuilder.UseSqlServer(stringConexao);

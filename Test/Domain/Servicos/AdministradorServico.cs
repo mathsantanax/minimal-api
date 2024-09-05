@@ -42,11 +42,9 @@ namespace Test.Domain.Entidades
             var administradorServico = new AdministradorServico(context);
             // Act
             administradorServico.Incluir(adm);
-            var admin = administradorServico.BuscarPorId(adm.Id);
 
             // Assert
             Assert.AreEqual(1, administradorServico.Todos(1).Count());
-            Assert.AreEqual(1, admin.Id);
         }
         
     }

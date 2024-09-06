@@ -1,20 +1,55 @@
+using System.Net;
+using System.Text;
+using System.Text.Json;
+using minimal_api.Dominio.DTOs;
 using minimal_api.Dominio.Entidades;
+using minimal_api.Dominio.ModelViews;
+using Test.Helpers;
 
 namespace Test.Domain.Entidades
 {
     [TestClass]
     public class AdministradorRequestTest
     {
-        [TestMethod]
-        public void TesterGetSetPropriedades()
+        [ClassInitialize]
+        public static void ClassInit(TestContext testContext)
         {
-        // Arrange
+            Setup.ClassInit(testContext);
+        }
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            Setup.ClassCleanup();
+        }
 
+        [TestMethod]
+        public async Task TestarGetSetPropriedades()
+        {
+            // Arrange
+            var loginDTO = new LoginDTO{
+                Email = "adm@teste.com",
+                Senha = "123456"
+            };
 
-        // Act
+            var content = new StringContent(JsonSerializer.Serialize(loginDTO), Encoding.UTF8,  "Application/json");
 
+            // Act
+            var response = await Setup.client.PostAsync("/Administradores/login", content);
 
-        // Assert
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+            var result = await response.Content.ReadAsStringAsync();
+            var admLogado = JsonSerializer.Deserialize<AdministradorLogado>(result, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            Assert.IsNotNull(admLogado?.Email ?? "");
+            Assert.IsNotNull(admLogado?.Perfil ?? "");
+            Assert.IsNotNull(admLogado?.Token ?? "");
+
+            Console.WriteLine(admLogado?.Token);
         }
     }
 }

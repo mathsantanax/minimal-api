@@ -1,6 +1,5 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.InMemory;
 using Microsoft.Extensions.Configuration;
 using minimal_api.Dominio.Entidades;
 using minimal_api.Dominio.Servicos;
